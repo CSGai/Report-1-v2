@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <title>Working...</title>
+  </head>
+  <body>
+    <form
+      method="POST"
+      name="hiddenform"
+      action="https://device.login.microsoftonline.com:443/"
+    >
+      <input
+        type="hidden"
+        name="request"
+        value="exampleValueHere"
+      /><input
+        type="hidden"
+        name="flowToken"
+        value="exampleValueHere"
+      /><input
+        type="hidden"
+        name="canary"
+        value="exampleValueHere"
+      /><noscript
+        ><p>Script is disabled. Click Submit to continue.</p>
+        <input type="submit" value="Submit"
+      /></noscript>
+    </form>
+    <script language="javascript" nonce="e">
+      document.forms[0].submit();
+    </script>
+  </body>
+</html>

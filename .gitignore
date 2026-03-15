@@ -1,0 +1,53 @@
+# Node dependencies
+node_modules/
+
+# Environment variables (credentials, tokens)
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage / testing
+coverage/
+.nyc_output/
+
+# Build output
+dist/
+build/
+
+# Temporary files
+tmp/
+temp/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local config
+config.local.json
+
+# Cookies / session dumps (important for your project)
+cookies.json
+cookiejar.json
+session.json
+
+# Optional: lock debugging artifacts
+*.tgz

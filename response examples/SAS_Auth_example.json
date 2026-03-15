@@ -1,0 +1,17 @@
+{
+  "Success": true,
+  "ResultValue": "Success",
+  "Message": null,
+  "AuthMethodId": "OneWaySMS",
+  "ErrCode": 0,
+  "Retry": false,
+  "FlowToken": "e",
+  "Ctx": "e",
+  "SessionId": "e",
+  "CorrelationId": "e",
+  "Timestamp": "2026-03-15T07:59:41Z",
+  "Entropy": 0,
+  "ReselectUIOption": 0,
+  "ContinuationToken": null,
+  "MobileAppAuthDetails": null
+}
