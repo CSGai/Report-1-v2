@@ -28,13 +28,17 @@ export async function login() {
     // Multi Factor Authentication
     console.log("user input is required for MFA!");
     console.log("attempting Multi factor authentication...");
-    await multiFactorAuth(flowToken, ctx);
-
-    // final דוח 1 authentication sequence
-    const authToken = await finalAuthentication();
-    console.log(authToken);
+    const mfaStatus = await multiFactorAuth(flowToken, ctx);
     
-    return { sessionFetch, authToken };
+    if (mfaStatus) {
+        // final דוח 1 authentication sequence
+        const authToken = await finalAuthentication();
+        console.log(authToken);
+        return { sessionFetch, authToken };
+    }
+    
+    console.error("Authentication Failed!");
+    process.exit(1);
 }
 
 
@@ -146,9 +150,8 @@ async function multiFactorAuth(flowToken, ctx, canary) {
             // const processAuthRes =  extractTokensCDATA(await processAuth.text())
             return processAuth;
         }
-
     }
-
+    return false;
 }
 
 // final authentication with the actual site

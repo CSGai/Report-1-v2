@@ -18,7 +18,7 @@ async function main() {
     console.log("res:", loginResponse)
 
 
-
+    // send to API the report
     const updateRes = await Promise.all(
         getNextSevenDays().map(date => {
             const dayData = plan[date.WeekDay];
