@@ -1,5 +1,6 @@
 import { login, getCookieStatus } from "./microsoftLogin.js";
-import { FormData } from "node-fetch";
+import { getNextSevenDays, updateCalander } from "./calanderAPI/calanderHandler.js"
+import plan from "./calanderAPI/weeklyCalanderPlan.json" assert { type: "json" };
 
 
 async function main() {
@@ -9,34 +10,31 @@ async function main() {
 
     // log into דוח 1 with the microsoft authentication
     const loginAttempt = await sessionFetch("https://one.prat.idf.il/api/account/login", {
-            method: "GET",
-            headers: {"Authorization": authToken.id_token}
-        }
+        method: "GET",
+        headers: { "Authorization": authToken.id_token }
+    }
     );
     const loginResponse = await loginAttempt.json();
     console.log("res:", loginResponse)
 
 
-    // const form = new FormData();
-    // // type
-    // form.append("MainCode", "02");
-    // // subtype
-    // form.append("SecondaryCode", "32");
-    // form.append("Note", "");
-    // form.append("FutureReportDate", "23.03.2026");
 
-    // const res = await sessionFetch(
-    //     "https://one.prat.idf.il/api/Attendance/InsertFutureReport",
-    //     {
-    //         method: "POST",
-    //         headers: {
-    //             "Accept": "application/json, text/plain, */*"
-    //         },
-    //         body: form
-    //     }
-    // );
-
-    // console.log(await res.text());
+    const updateRes = await Promise.all(
+        getNextSevenDays().map(date => {
+            const dayData = plan[date.WeekDay];
+            console.log(dayData);
+            console.log(date.Date);
+            return updateCalander(
+                sessionFetch,
+                dayData.MainCode,
+                dayData.SecondaryCode,
+                dayData.Note,
+                date.Date
+            );
+        })
+    );
+    
+    console.log(updateRes);
 
     process.exit();
 }

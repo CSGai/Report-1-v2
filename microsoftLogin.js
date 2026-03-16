@@ -1,4 +1,3 @@
-import fetch from "node-fetch";
 import fetchCookie from "fetch-cookie";
 import { CookieJar } from "tough-cookie";
 import crypto from "crypto";
@@ -34,6 +33,7 @@ export async function login() {
     // final דוח 1 authentication sequence
     const authToken = await finalAuthentication();
     console.log(authToken);
+    
     return { sessionFetch, authToken };
 }
 

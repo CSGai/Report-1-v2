@@ -1,0 +1,44 @@
+{
+  "Sunday": {
+    "MainCode": "02",
+    "SecondaryCode": "32",
+    "Note": "",
+    "FutureReportDate": "dd.mm.20YY"
+  },
+  "Monday": {
+    "MainCode": "02",
+    "SecondaryCode": "32",
+    "Note": "",
+    "FutureReportDate": "dd.mm.20YY"
+  },
+  "Tuesday": {
+    "MainCode": "02",
+    "SecondaryCode": "32",
+    "Note": "",
+    "FutureReportDate": "dd.mm.20YY"
+  },
+  "Wednesday": {
+    "MainCode": "02",
+    "SecondaryCode": "32",
+    "Note": "",
+    "FutureReportDate": "dd.mm.20YY"
+  },
+  "Thursday": {
+    "MainCode": "02",
+    "SecondaryCode": "32",
+    "Note": "",
+    "FutureReportDate": "dd.mm.20YY"
+  },
+  "Friday": {
+    "MainCode": "02",
+    "SecondaryCode": "09",
+    "Note": "",
+    "FutureReportDate": "dd.mm.20YY"
+  },
+  "Saturday": {
+    "MainCode": "02",
+    "SecondaryCode": "09",
+    "Note": "",
+    "FutureReportDate": "dd.mm.20YY"
+  }
+}
