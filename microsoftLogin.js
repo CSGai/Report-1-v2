@@ -125,11 +125,6 @@ async function multiFactorAuth(flowToken, ctx, canary) {
 
         const endAuthRes = await endAuth.json();
         if (endAuthRes["Success"] === true) {
-            // post to ksmi for future logins
-            // i actually chose not to remember login info because 
-            // then i'd have to make a branch of this to handle the auto login with kmsi as well
-
-
             const processAuth = await sessionFetch(
                 "https://login.microsoftonline.com/common/SAS/ProcessAuth",
                 {
@@ -270,7 +265,7 @@ function base64UrlEncode(buffer) {
 
 // generate a random but valid PKCE verifier and challenger
 function generatePKCE() {
-  const verifier = base64UrlEncode(crypto.randomBytes(32));
-  const challenge = base64UrlEncode(crypto.createHash('sha256').update(verifier).digest());
-  return { verifier, challenge };
+    const verifier = base64UrlEncode(crypto.randomBytes(32));
+    const challenge = base64UrlEncode(crypto.createHash('sha256').update(verifier).digest());
+    return { verifier, challenge };
 }
