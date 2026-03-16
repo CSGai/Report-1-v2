@@ -1,5 +1,5 @@
 # claud ai coming in clutch because i didn't want to make a node console application
-# for no particular reason (it would be so much easier as well...) and this ended up pretty good
+# mostly to see if it could and this ended up pretty good after like 20 minutes of debugging
 
 param(
     [string]$JsonFile  = ".\calanderAPI\weeklyCalanderPlan.json",
