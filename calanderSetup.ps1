@@ -1,4 +1,6 @@
-# fill-week.ps1 - PowerShell 5.1+ compatible
+# claud ai coming in clutch because i didn't want to make a node console application
+# for no particular reason (it would be so much easier as well...) and this ended up pretty good
+
 param(
     [string]$JsonFile  = ".\calanderAPI\weeklyCalanderPlan.json",
     [string]$CodesFile = ".\calanderAPI\CalanderCodes.json"
@@ -140,8 +142,19 @@ foreach ($day in $days) {
     }
 }
 
-# ── Save ─────────────────────────────────────────────────────
+# ── Save (ordered) ────────────────────────────────────────────
 
-$data | ConvertTo-Json -Depth 5 | Set-Content -Path $JsonFile -Encoding UTF8
+$ordered = [ordered]@{}
+foreach ($day in $days) {
+    $d = $data[$day]
+    $ordered[$day] = [ordered]@{
+        MainCode         = $d["MainCode"]
+        SecondaryCode    = $d["SecondaryCode"]
+        Note             = $d["Note"]
+        FutureReportDate = $d["FutureReportDate"]
+    }
+}
+
+$ordered | ConvertTo-Json -Depth 5 | Set-Content -Path $JsonFile -Encoding UTF8
 Write-Host ""
 Write-Host ("Saved to " + $JsonFile) -ForegroundColor Green
