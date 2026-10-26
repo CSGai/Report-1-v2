@@ -90,7 +90,6 @@ Environment variables, read from `.env` via `node --env-file`:
 |---|---|
 | `USER_ID` | Your personal number. The bot signs in as `<USER_ID>@idf.il`. |
 | `USER_PASSWORD` | Your Microsoft account password. |
-| `CLIENT_ID` | The Entra application (client) id of the דוח 1 web app, used for the authorize request. |
 
 Config files:
 

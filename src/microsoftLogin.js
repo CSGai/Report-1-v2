@@ -7,7 +7,8 @@ const sessionFetch = fetchCookie(fetch, jar);
 
 const username = process.env.USER_ID;
 const password = process.env.USER_PASSWORD;
-const clientId = process.env.CLIENT_ID;
+// Entra application (client) id of the דוח 1 web app; fixed per site, not a secret
+const clientId = "f39dfb4b-6a50-42a5-98aa-829fc7414a10";
 
 export async function login() {
     // initial tokens
