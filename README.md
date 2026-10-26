@@ -4,32 +4,22 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=flat)
 ![Created](https://img.shields.io/badge/Created-March%202026-lightgrey?style=flat)
 
+Made in March 2026.
+
 Submits your weekly דוח 1 (Report 1) attendance on one.prat.idf.il from a JSON plan, with no browser.
 
 Filling in דוח 1 by hand, every day or every week depending on the situation, was a pain, so
-this bot does it instead. It signs in to the site the way the browser does (Microsoft Entra
-password, SMS code, OAuth token), then posts a report for today and each of the next seven days
-from a weekly plan in [config/weeklyCalendarPlan.json](config/weeklyCalendarPlan.json). Made in
-March 2026.
+this bot does it instead :). It signs in to the site the way the browser does, reconstructed using requests (Microsoft Entra, password, SMS code, OAuth token), then posts a report for today and each of the next seven days
+from a weekly plan in [config/weeklyCalendarPlan.json](config/weeklyCalendarPlan.json).
+
 
 ## 📑 Table of Contents
 
-- [Background](#-background)
 - [Build](#-build)
 - [Usage](#-usage)
 - [Architecture](#-architecture)
-- [Flow](#-flow)
-- [Outputs](#-outputs)
-- [Maintainers](#-maintainers)
-- [Contributing](#-contributing)
+- [Outputs](#-calls)
 - [License](#-license)
-
-## 📖 Background
-
-The site has no public API, so I opened the browser's dev tools, watched what it sent while I
-signed in and filed a report, and taught the bot to send the same thing. A few rounds of
-record, replay, fix later, it logs in and reports without a browser at all. Sanitised captures
-of the pages it had to get through live in [examples/](examples/).
 
 ## 🔨 Build
 
@@ -40,8 +30,6 @@ Requires Node.js 22 or newer (the project relies on `--env-file` and `import ...
 ```bash
 npm install
 ```
-
-There is no compile step; the code runs straight from [src/](src/).
 
 ### Dependencies
 
@@ -115,54 +103,7 @@ scripts/
 examples/                  sanitised captures of the login pages and API payloads
 ```
 
-## 🔀 Flow
-
-```mermaid
-flowchart TD
-    subgraph login["login.microsoftonline.com"]
-        T["getInitTokens"]
-        P["postLogin"]
-        H["handleHiddenForm"]
-        B["BeginAuth"]
-        E["EndAuth"]
-        PA["ProcessAuth"]
-        A["authorize"]
-        TK["token"]
-    end
-    subgraph site["one.prat.idf.il"]
-        L["account/login"]
-        R["Attendance/InsertFutureReport"]
-    end
-    T --> P
-    P -- "device.login" --> H
-    H -- "DeviceAuthTls/reprocess" --> B
-    B -- "SMS code" --> E
-    E --> PA
-    PA --> A
-    A -- "code" --> TK
-    TK -- "id_token" --> L
-    L -- "x8" --> R
-```
-
-1. `getInitTokens` fetches the login page and pulls `sFT`, `sCtx`, `canary` and `sessionId` out
-   of its CDATA block.
-2. `postLogin` posts the username and password. The response is a hidden form that
-   `handleHiddenForm` submits twice: first to `device.login.microsoftonline.com`, then to the
-   `DeviceAuthTls/reprocess` endpoint it redirects to. The final page yields fresh tokens.
-3. `multiFactorAuth` calls `SAS/BeginAuth` with `OneWaySMS`, waits for you to type the code on
-   stdin, posts it to `SAS/EndAuth`, then completes the step with `SAS/ProcessAuth`.
-4. `finalAuthentication` generates a PKCE verifier and challenge, hits `/oauth2/v2.0/authorize`
-   with `prompt=none`, reads the `code` from the redirect, and exchanges it at
-   `/oauth2/v2.0/token` for an `id_token`.
-5. `main` sends the `id_token` as the `Authorization` header to `/api/account/login`, then calls
-   `updateCalendar` once for today and once for each of the next seven days.
-
-All of the above shares one cookie jar, so the Entra session cookies (`ESTSAUTH` and friends)
-and the דוח 1 session survive every redirect.
-
-## 📤 Outputs
-
-The bot listens on nothing. It makes these outbound calls:
+## 📤 Calls
 
 | endpoint | purpose |
 |---|---|
@@ -173,20 +114,6 @@ The bot listens on nothing. It makes these outbound calls:
 | `GET https://one.prat.idf.il/api/account/login` | דוח 1 session |
 | `POST https://one.prat.idf.il/api/Attendance/InsertFutureReport` | one multipart form per day: `MainCode`, `SecondaryCode`, `Note`, `FutureReportDate` (`dd.mm.yyyy`) |
 
-The bot writes no files; `npm run plan` is the only thing that rewrites
-[config/weeklyCalendarPlan.json](config/weeklyCalendarPlan.json). Progress and the per-day API
-responses go to stdout. A failed login, a missing weekday in the plan or a rejected report exits with status 1.
-
-## 👤 Maintainers
-
-[@CSGai](https://github.com/CSGai)
-
-## 🤝 Contributing
-
-Questions and bug reports go to the
-[issue tracker](https://github.com/CSGai/Report-1-v2/issues). Pull requests are welcome; keep
-commits in the Conventional Commits style used in this repo and never commit a real `.env` or
-captured tokens.
 
 ## 📄 License
 
