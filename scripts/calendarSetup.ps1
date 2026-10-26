@@ -46,12 +46,12 @@ function Show-Menu($fieldName, $labels, $currentLabel) {
 
     $keepHint = if ($currentLabel) { Reverse-String $currentLabel } else { "none" }
     Write-Host ""
-    $input = Read-Host ("  Pick [1-" + $labels.Count + "] or Enter to keep [" + $keepHint + "]")
+    $choice = Read-Host ("  Pick [1-" + $labels.Count + "] or Enter to keep [" + $keepHint + "]")
 
-    if ($input -eq "") { return -1 }
+    if ($choice -eq "") { return -1 }
 
     $n = 0
-    if ([int]::TryParse($input, [ref]$n) -and $n -ge 1 -and $n -le $labels.Count) {
+    if ([int]::TryParse($choice, [ref]$n) -and $n -ge 1 -and $n -le $labels.Count) {
         return ($n - 1)
     }
 
@@ -83,7 +83,7 @@ if (Test-Path $JsonFile) {
 
 function Find-PrimaryLabel($code) {
     foreach ($label in $primaries.Keys) {
-        $c = if ($primaries[$label]["code"] -ne $null) { $primaries[$label]["code"] } else { $primaries[$label]["codes"] }
+        $c = $primaries[$label]["code"]
         if ($c -eq $code) { return $label }
     }
     return $null
@@ -118,7 +118,7 @@ foreach ($day in $days) {
     if ($idx -ge 0) { $curMainLabel = $primaryLabels[$idx] }
 
     $primaryEntry = $primaries[$curMainLabel]
-    $mainCode     = if ($primaryEntry["code"] -ne $null) { $primaryEntry["code"] } else { $primaryEntry["codes"] }
+    $mainCode     = $primaryEntry["code"]
 
     # Pick secondary filtered to chosen primary
     $secMap      = $primaryEntry["secondaries"]
