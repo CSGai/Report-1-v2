@@ -1,5 +1,5 @@
 import { login } from "./microsoftLogin.js";
-import { getNextSevenDays, updateCalendar } from "./calendar/calendarHandler.js";
+import { getNextSevenDays, updateCalendar } from "./calendarHandler.js";
 import plan from "../config/weeklyCalendarPlan.json" with { type: "json" };
 
 async function main() {

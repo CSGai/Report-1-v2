@@ -108,8 +108,7 @@ is tracked.
 src/
   main.js                  entry point: login, דוח 1 session, submit the week
   microsoftLogin.js        Microsoft Entra sign-in, SMS MFA, PKCE token exchange
-  calendar/
-    calendarHandler.js     next-seven-days helper and the InsertFutureReport call
+  calendarHandler.js       next-seven-days helper and the InsertFutureReport call
 config/
   weeklyCalendarPlan.json  what to report on each weekday
   calendarCodes.json       attendance code catalogue for the plan editor
