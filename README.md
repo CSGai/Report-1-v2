@@ -2,6 +2,7 @@
 
 ![Node.js](https://img.shields.io/badge/Node.js%20%3E%3D22-339933?style=flat&logo=nodedotjs&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=flat)
+![Created](https://img.shields.io/badge/Created-March%202026-lightgrey?style=flat)
 
 Submits your weekly דוח 1 (Report 1) attendance on one.prat.idf.il from a JSON plan, with no browser.
 
@@ -10,7 +11,8 @@ hidden-form hops, SMS multi-factor authentication, then the PKCE OAuth code exch
 the דוח 1 API with the resulting `id_token`, and posts one future attendance report for each of
 the next seven days. What it reports per weekday comes from
 [config/weeklyCalendarPlan.json](config/weeklyCalendarPlan.json), which you can edit by hand or
-through the interactive [scripts/calendarSetup.ps1](scripts/calendarSetup.ps1) menu.
+through the interactive [scripts/calendarSetup.ps1](scripts/calendarSetup.ps1) menu. The project
+was started in March 2026.
 
 ## 📑 Table of Contents
 
