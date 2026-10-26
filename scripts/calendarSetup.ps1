@@ -1,11 +1,11 @@
-# Interactive editor for calendarAPI/weeklyCalendarPlan.json.
+# Interactive editor for config/weeklyCalendarPlan.json.
 # Walks through each weekday, lets you pick a main/secondary attendance code
-# (labels come from calendarAPI/calendarCodes.json) and an optional note, then
+# (labels come from config/calendarCodes.json) and an optional note, then
 # writes the plan back out. Run via: npm run plan
 
 param(
-    [string]$JsonFile  = ".lendarAPIweeklyCalendarPlan.json",
-    [string]$CodesFile = ".lendarAPIlendarCodes.json"
+    [string]$JsonFile  = (Join-Path $PSScriptRoot "..\config\weeklyCalendarPlan.json"),
+    [string]$CodesFile = (Join-Path $PSScriptRoot "..\config\calendarCodes.json")
 )
 
 & cmd /c "chcp 65001" | Out-Null

@@ -1,6 +1,6 @@
 import { login } from "./microsoftLogin.js";
-import { getNextSevenDays, updateCalendar } from "./calendarAPI/calendarHandler.js";
-import plan from "./calendarAPI/weeklyCalendarPlan.json" with { type: "json" };
+import { getNextSevenDays, updateCalendar } from "./calendar/calendarHandler.js";
+import plan from "../config/weeklyCalendarPlan.json" with { type: "json" };
 
 async function main() {
     const { authToken, sessionFetch } = await login();

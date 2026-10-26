@@ -2,11 +2,11 @@
   "name": "report-1-bot",
   "version": "1.0.0",
   "description": "Automates the weekly דוח 1 (Report 1) attendance submission on one.prat.idf.il by scripting the Microsoft SSO + SMS MFA login and posting future reports from a weekly plan.",
-  "main": "main.js",
+  "main": "src/main.js",
   "type": "module",
   "scripts": {
-    "start": "node --env-file=.env main.js",
-    "plan": "powershell -ExecutionPolicy Bypass -File ./calendarSetup.ps1"
+    "start": "node --env-file=.env src/main.js",
+    "plan": "powershell -ExecutionPolicy Bypass -File ./scripts/calendarSetup.ps1"
   },
   "author": "CSGai",
   "license": "MIT",
