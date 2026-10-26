@@ -26,12 +26,10 @@ March 2026.
 
 ## 📖 Background
 
-Filling in דוח 1 by hand means the same clicks every week. The site has no public API, so this
-project was built by recording the browser's requests and replaying them: the login pages
-embed their state in a `//<![CDATA[` block and in hidden forms, the MFA step is the
-`SAS/BeginAuth` / `SAS/EndAuth` / `SAS/ProcessAuth` trio, and the final hop is a normal OAuth 2.0
-authorization-code flow with PKCE. Sanitised captures of the intermediate pages live in
-[examples/](examples/) so the parsing code can be understood without a live session.
+The site has no public API, so I opened the browser's dev tools, watched what it sent while I
+signed in and filed a report, and taught the bot to send the same thing. A few rounds of
+record, replay, fix later, it logs in and reports without a browser at all. Sanitised captures
+of the pages it had to get through live in [examples/](examples/).
 
 ## 🔨 Build
 
