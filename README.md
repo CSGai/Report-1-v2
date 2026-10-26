@@ -179,7 +179,7 @@ The bot listens on nothing. It makes these outbound calls:
 
 The bot writes no files; `npm run plan` is the only thing that rewrites
 [config/weeklyCalendarPlan.json](config/weeklyCalendarPlan.json). Progress and the per-day API
-responses go to stdout; a failed login exits with status 1.
+responses go to stdout. A failed login, a missing weekday in the plan or a rejected report exits with status 1.
 
 ## 👤 Maintainers
 
