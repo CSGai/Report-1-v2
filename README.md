@@ -8,8 +8,8 @@ Submits your weekly דוח 1 (Report 1) attendance on one.prat.idf.il from a JSO
 
 The bot reproduces the site's Microsoft Entra sign-in with plain `fetch` calls (password, device
 hidden-form hops, SMS multi-factor authentication, then the PKCE OAuth code exchange), logs into
-the דוח 1 API with the resulting `id_token`, and posts one future attendance report for each of
-the next seven days. What it reports per weekday comes from
+the דוח 1 API with the resulting `id_token`, and posts one future attendance report for today and
+for each of the next seven days, eight in all. What it reports per weekday comes from
 [config/weeklyCalendarPlan.json](config/weeklyCalendarPlan.json), which you can edit by hand or
 through the interactive [scripts/calendarSetup.ps1](scripts/calendarSetup.ps1) menu. The project
 was started in March 2026.
@@ -77,12 +77,12 @@ Both wrap Node's built-in `fetch` so cookies persist across the login redirects.
    ```
 
    or double-click [scripts/run_bot.bat](scripts/run_bot.bat). The bot signs in, asks you to
-   type the SMS code it triggered, then submits the seven reports and prints a table of the
-   API responses.
+   type the SMS code it triggered, then submits the eight reports (today plus the next seven days) and prints a
+   table of the API responses.
 
 Each day's report uses the `MainCode`, `SecondaryCode` and `Note` of its weekday from the plan.
 The `FutureReportDate` field in the plan file is a placeholder (`dd.mm.20YY`); the bot fills in
-the real date for each of the next seven days at run time.
+the real date for today and each of the next seven days at run time.
 
 ### Configuration
 
@@ -109,7 +109,7 @@ is tracked.
 src/
   main.js                  entry point: login, דוח 1 session, submit the week
   microsoftLogin.js        Microsoft Entra sign-in, SMS MFA, PKCE token exchange
-  calendarHandler.js       next-seven-days helper and the InsertFutureReport call
+  calendarHandler.js       report-days helper (today plus seven) and the InsertFutureReport call
 config/
   weeklyCalendarPlan.json  what to report on each weekday
   calendarCodes.json       attendance code catalogue for the plan editor
@@ -145,7 +145,7 @@ flowchart TD
     PA --> A
     A -- "code" --> TK
     TK -- "id_token" --> L
-    L -- "x7" --> R
+    L -- "x8" --> R
 ```
 
 1. `getInitTokens` fetches the login page and pulls `sFT`, `sCtx`, `canary` and `sessionId` out
@@ -159,7 +159,7 @@ flowchart TD
    with `prompt=none`, reads the `code` from the redirect, and exchanges it at
    `/oauth2/v2.0/token` for an `id_token`.
 5. `main` sends the `id_token` as the `Authorization` header to `/api/account/login`, then calls
-   `updateCalendar` once per day for the next seven days.
+   `updateCalendar` once for today and once for each of the next seven days.
 
 All of the above shares one cookie jar, so the Entra session cookies (`ESTSAUTH` and friends)
 and the דוח 1 session survive every redirect.

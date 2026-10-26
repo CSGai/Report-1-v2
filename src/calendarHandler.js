@@ -9,8 +9,8 @@ function formatReportDate(date) {
     return `${day}.${month}.${year}`;
 }
 
-// returns { Date, WeekDay } for today and the following seven days
-export function getNextSevenDays() {
+// returns { Date, WeekDay } for today and the seven days after it (eight reports)
+export function getReportDays() {
     const today = new Date();
     const dates = [];
 

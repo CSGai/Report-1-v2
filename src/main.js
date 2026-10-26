@@ -1,5 +1,5 @@
 import { login } from "./microsoftLogin.js";
-import { getNextSevenDays, updateCalendar } from "./calendarHandler.js";
+import { getReportDays, updateCalendar } from "./calendarHandler.js";
 import plan from "../config/weeklyCalendarPlan.json" with { type: "json" };
 
 const SITE_LOGIN_URL = "https://one.prat.idf.il/api/account/login";
@@ -13,7 +13,7 @@ function validatePlan(days) {
 }
 
 async function main() {
-    const days = getNextSevenDays();
+    const days = getReportDays();
     validatePlan(days);
 
     const { authToken, sessionFetch } = await login();
@@ -28,7 +28,7 @@ async function main() {
     }
     console.log(`דוח 1 login succeeded (HTTP ${loginAttempt.status})`);
 
-    // submit one future report per day for the coming week
+    // submit one future report for today and each of the next seven days
     const results = await Promise.allSettled(
         days.map(({ Date: date, WeekDay }) => {
             const { MainCode, SecondaryCode, Note } = plan[WeekDay];
