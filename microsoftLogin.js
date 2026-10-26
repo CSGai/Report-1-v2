@@ -9,7 +9,6 @@ const username = process.env.USER_ID;
 const password = process.env.USER_PASSWORD;
 const clientId = process.env.CLIENT_ID;
 
-
 export async function login() {
     // initial tokens
     await sessionFetch("https://one.prat.idf.il/");
@@ -20,10 +19,9 @@ export async function login() {
     console.log("attempting login authentication...");
     ({ flowToken, ctx, canary, sessionId } = await postLogin(flowToken, ctx, canary, sessionId));
 
-    var currentCookies = await getCookieStatus();
+    const currentCookies = await getCookieStatus();
     const authCookies = ["ESTSAUTH", "ESTSAUTHPERSISTENT", "ESTSAUTHLIGHT",];
     if (authCookies.some(name => currentCookies.some(c => c.key === name))) console.log("initial authentication successful!");
-
 
     // Multi Factor Authentication
     console.log("user input is required for MFA!");
@@ -33,15 +31,12 @@ export async function login() {
     if (mfaStatus) {
         // final דוח 1 authentication sequence
         const authToken = await finalAuthentication();
-        console.log(authToken);
         return { sessionFetch, authToken };
     }
     
     console.error("Authentication Failed!");
     process.exit(1);
 }
-
-
 
 /*================ AUTHENTICATION SEQUENCE ================*/
 
@@ -72,7 +67,7 @@ async function postLogin(flowToken, ctx, canary, sessionId) {
         }
     )
 
-    // handle hiddenform in login respose and nested hiddenform login within that
+    // handle hiddenform in login response and nested hiddenform login within that
     const deviceLoginRedirect = await handleHiddenForm(await auth.text());
     const reprocessRedirect = await handleHiddenForm(await deviceLoginRedirect.text());
 
@@ -147,7 +142,6 @@ async function multiFactorAuth(flowToken, ctx, canary) {
                 }
             );
 
-            // const processAuthRes =  extractTokensCDATA(await processAuth.text())
             return processAuth;
         }
     }
@@ -178,12 +172,8 @@ async function finalAuthentication() {
     );
 
     // extract redirect and code
-    console.log(auth.status);
-    console.log(auth.headers.get("location"));
     const redirectUrl = auth.headers.get("location");
     const code = redirectUrl.match(/code=([^&]+)/)[1];
-
-    console.log("OAuth code:", code);
 
     // exchange code for access token
     const oauth2 = await sessionFetch(
@@ -206,12 +196,10 @@ async function finalAuthentication() {
     return await oauth2.json();
 }
 
-
 /*================ MISC ================*/
 
 // extracts session tokens from CDATA using regex
 function extractTokensCDATA(html) {
-    // console.log(html.match(/\/\/<!\[CDATA\[(.*?)\/\/\]\]>/s)[1]);
     const flowToken = html.match(/"sFT":"(.*?)"/)[1];
     const ctx = html.match(/"sCtx":"(.*?)"/)[1];
     const canary = html.match(/"canary":"(.*?)"/)[1];
@@ -222,8 +210,7 @@ function extractTokensCDATA(html) {
 
 async function handleHiddenForm(html) {
     const { target, inputs } = extractTokensHiddenForm(html);
-    console.log(`\n\n${target}:\n`);
-    for (const [key, value] of Object.entries(inputs)) console.log(key, ":", value);
+    console.log("following hiddenform redirect:", target);
     return await sessionFetch(
         target,
         {
@@ -234,7 +221,7 @@ async function handleHiddenForm(html) {
         }
     )
 }
-// extracts session tokens from html hiddenfo using regex
+// extracts the target and hidden inputs from an html hiddenform using regex
 function extractTokensHiddenForm(html) {
     // captures all inputs and values
     const regex = /<input[^>]*name="([^"]+)"[^>]*value="([^"]*)"[^>]*>/g;
@@ -257,7 +244,7 @@ export async function getCookieStatus() {
     return cookies;
 }
 
-// based 64 urlencoding stuff
+// base64url encoding helper
 function base64UrlEncode(buffer) {
   return Buffer.from(buffer)
     .toString('base64')
@@ -266,7 +253,7 @@ function base64UrlEncode(buffer) {
     .replace(/=+$/, '');
 }
 
-// generate a random but valid PKCE verifier and challenger
+// generate a random but valid PKCE verifier and challenge
 function generatePKCE() {
     const verifier = base64UrlEncode(crypto.randomBytes(32));
     const challenge = base64UrlEncode(crypto.createHash('sha256').update(verifier).digest());

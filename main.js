@@ -1,42 +1,32 @@
-import { login, getCookieStatus } from "./microsoftLogin.js";
-import { getNextSevenDays, updateCalander } from "./calanderAPI/calanderHandler.js"
-import plan from "./calanderAPI/weeklyCalanderPlan.json" assert { type: "json" };
-
+import { login } from "./microsoftLogin.js";
+import { getNextSevenDays, updateCalander } from "./calanderAPI/calanderHandler.js";
+import plan from "./calanderAPI/weeklyCalanderPlan.json" with { type: "json" };
 
 async function main() {
-
     const { authToken, sessionFetch } = await login();
-    await getCookieStatus();
 
-    // log into דוח 1 with the microsoft authentication
+    // log into דוח 1 with the Microsoft id_token
     const loginAttempt = await sessionFetch("https://one.prat.idf.il/api/account/login", {
         method: "GET",
         headers: { "Authorization": authToken.id_token }
-    }
-    );
+    });
     const loginResponse = await loginAttempt.json();
-    console.log("res:", loginResponse)
+    console.log("דוח 1 login:", loginResponse);
 
-
-    // send to API the report
-    const updateRes = await Promise.all(
-        getNextSevenDays().map(date => {
-            const dayData = plan[date.WeekDay];
-            console.log(dayData);
-            console.log(date.Date);
-            return updateCalander(
-                sessionFetch,
-                dayData.MainCode,
-                dayData.SecondaryCode,
-                dayData.Note,
-                date.Date
-            );
+    // submit one future report per day for the coming week
+    const results = await Promise.all(
+        getNextSevenDays().map(({ Date, WeekDay }) => {
+            const { MainCode, SecondaryCode, Note } = plan[WeekDay];
+            return updateCalander(sessionFetch, MainCode, SecondaryCode, Note, Date)
+                .then(res => ({ date: Date, weekday: WeekDay, response: res }));
         })
     );
-    
-    console.log(updateRes);
 
-    process.exit();
+    console.table(results);
+    process.exit(0);
 }
 
-main();
+main().catch(err => {
+    console.error("Run failed:", err);
+    process.exit(1);
+});
