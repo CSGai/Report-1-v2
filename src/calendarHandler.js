@@ -9,9 +9,10 @@ function getNextSevenDays() {
         const nextDate = new Date(dateObj);
         nextDate.setDate(dateObj.getDate() + i);
 
-        const day = nextDate.getUTCDate().toString().padStart(2, "0");
-        const month = (nextDate.getUTCMonth() + 1).toString().padStart(2, "0");
-        const year = nextDate.getUTCFullYear();
+        // local getters throughout: the weekday below is local too, so the two can never disagree
+        const day = nextDate.getDate().toString().padStart(2, "0");
+        const month = (nextDate.getMonth() + 1).toString().padStart(2, "0");
+        const year = nextDate.getFullYear();
 
         dates.push({"Date":`${day}.${month}.${year}`, "WeekDay": days[nextDate.getDay()]});
     }
