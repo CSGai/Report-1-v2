@@ -1,48 +1,42 @@
-const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const INSERT_FUTURE_REPORT_URL = "https://one.prat.idf.il/api/Attendance/InsertFutureReport";
 
-// returns valid dates for the next 7 days
-function getNextSevenDays() {
-    const dateObj = new Date();
-    
-    const dates = []
-    for (var i = 0; i <= 7; i++) {
-        const nextDate = new Date(dateObj);
-        nextDate.setDate(dateObj.getDate() + i);
+// formats a Date as dd.mm.yyyy using the local calendar day
+function formatReportDate(date) {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}.${month}.${year}`;
+}
 
-        // local getters throughout: the weekday below is local too, so the two can never disagree
-        const day = nextDate.getDate().toString().padStart(2, "0");
-        const month = (nextDate.getMonth() + 1).toString().padStart(2, "0");
-        const year = nextDate.getFullYear();
+// returns { Date, WeekDay } for today and the following seven days
+export function getNextSevenDays() {
+    const today = new Date();
+    const dates = [];
 
-        dates.push({"Date":`${day}.${month}.${year}`, "WeekDay": days[nextDate.getDay()]});
+    for (let i = 0; i <= 7; i++) {
+        const nextDate = new Date(today);
+        nextDate.setDate(today.getDate() + i);
+
+        dates.push({ Date: formatReportDate(nextDate), WeekDay: WEEKDAYS[nextDate.getDay()] });
     }
 
     return dates;
-
 }
 
-async function updateCalendar(sessionFetch, MainCode, SecondaryCode, Note, FutureReportDate) {
+// posts a single future report and returns the HTTP status with the response body
+export async function updateCalendar(sessionFetch, MainCode, SecondaryCode, Note, FutureReportDate) {
     const form = new FormData();
-    // catagory
-    form.append("MainCode", MainCode);
-    // subcatagory
-    form.append("SecondaryCode", SecondaryCode);
-
+    form.append("MainCode", MainCode);         // category
+    form.append("SecondaryCode", SecondaryCode); // subcategory
     form.append("Note", Note);
     form.append("FutureReportDate", FutureReportDate);
 
-    const res = await sessionFetch(
-        "https://one.prat.idf.il/api/Attendance/InsertFutureReport",
-        {
-            method: "POST",
-            headers: {
-                "Accept": "application/json, text/plain, */*"
-            },
-            body: form
-        }
-    );
+    const res = await sessionFetch(INSERT_FUTURE_REPORT_URL, {
+        method: "POST",
+        headers: { "Accept": "application/json, text/plain, */*" },
+        body: form
+    });
 
-    return await res.text();
+    return { status: res.status, body: await res.text() };
 }
-
-export { getNextSevenDays, updateCalendar };
