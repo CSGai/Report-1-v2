@@ -185,7 +185,7 @@ async function finalAuthentication() {
                 Origin: "https://one.prat.idf.il"
             },
             body: new URLSearchParams({
-                client_id: "f39dfb4b-6a50-42a5-98aa-829fc7414a10",
+                client_id: clientId,
                 grant_type: "authorization_code",
                 code: code,
                 redirect_uri: "https://one.prat.idf.il/",
