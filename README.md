@@ -6,13 +6,11 @@
 
 Submits your weekly דוח 1 (Report 1) attendance on one.prat.idf.il from a JSON plan, with no browser.
 
-The bot reproduces the site's Microsoft Entra sign-in with plain `fetch` calls (password, device
-hidden-form hops, SMS multi-factor authentication, then the PKCE OAuth code exchange), logs into
-the דוח 1 API with the resulting `id_token`, and posts one future attendance report for today and
-for each of the next seven days, eight in all. What it reports per weekday comes from
-[config/weeklyCalendarPlan.json](config/weeklyCalendarPlan.json), which you can edit by hand or
-through the interactive [scripts/calendarSetup.ps1](scripts/calendarSetup.ps1) menu. The project
-was started in March 2026.
+Filling in דוח 1 by hand, every day or every week depending on the situation, was a pain, so
+this bot does it instead. It signs in to the site the way the browser does (Microsoft Entra
+password, SMS code, OAuth token), then posts a report for today and each of the next seven days
+from a weekly plan in [config/weeklyCalendarPlan.json](config/weeklyCalendarPlan.json). Made in
+March 2026.
 
 ## 📑 Table of Contents
 
