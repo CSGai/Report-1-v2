@@ -1,9 +1,11 @@
-# claud ai coming in clutch because i didn't want to make a node console application
-# mostly to see if it could and this ended up pretty good after like 20 minutes of debugging
+# Interactive editor for calendarAPI/weeklyCalendarPlan.json.
+# Walks through each weekday, lets you pick a main/secondary attendance code
+# (labels come from calendarAPI/calendarCodes.json) and an optional note, then
+# writes the plan back out. Run via: npm run plan
 
 param(
-    [string]$JsonFile  = ".\calanderAPI\weeklyCalanderPlan.json",
-    [string]$CodesFile = ".\calanderAPI\CalanderCodes.json"
+    [string]$JsonFile  = ".lendarAPIweeklyCalendarPlan.json",
+    [string]$CodesFile = ".lendarAPIlendarCodes.json"
 )
 
 & cmd /c "chcp 65001" | Out-Null

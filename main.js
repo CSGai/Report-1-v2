@@ -1,6 +1,6 @@
 import { login } from "./microsoftLogin.js";
-import { getNextSevenDays, updateCalander } from "./calanderAPI/calanderHandler.js";
-import plan from "./calanderAPI/weeklyCalanderPlan.json" with { type: "json" };
+import { getNextSevenDays, updateCalendar } from "./calendarAPI/calendarHandler.js";
+import plan from "./calendarAPI/weeklyCalendarPlan.json" with { type: "json" };
 
 async function main() {
     const { authToken, sessionFetch } = await login();
@@ -17,7 +17,7 @@ async function main() {
     const results = await Promise.all(
         getNextSevenDays().map(({ Date, WeekDay }) => {
             const { MainCode, SecondaryCode, Note } = plan[WeekDay];
-            return updateCalander(sessionFetch, MainCode, SecondaryCode, Note, Date)
+            return updateCalendar(sessionFetch, MainCode, SecondaryCode, Note, Date)
                 .then(res => ({ date: Date, weekday: WeekDay, response: res }));
         })
     );

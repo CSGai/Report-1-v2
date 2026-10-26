@@ -20,7 +20,7 @@ function getNextSevenDays() {
 
 }
 
-async function updateCalander(sessionFetch, MainCode, SecondaryCode, Note, FutureReportDate) {
+async function updateCalendar(sessionFetch, MainCode, SecondaryCode, Note, FutureReportDate) {
     const form = new FormData();
     // catagory
     form.append("MainCode", MainCode);
@@ -44,4 +44,4 @@ async function updateCalander(sessionFetch, MainCode, SecondaryCode, Note, Futur
     return await res.text();
 }
 
-export { getNextSevenDays, updateCalander };
+export { getNextSevenDays, updateCalendar };

@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node --env-file=.env main.js",
-    "plan": "powershell -ExecutionPolicy Bypass -File ./calanderSetup.ps1"
+    "plan": "powershell -ExecutionPolicy Bypass -File ./calendarSetup.ps1"
   },
   "author": "CSGai",
   "license": "MIT",
